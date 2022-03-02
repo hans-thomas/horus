@@ -15,7 +15,7 @@
     "require-dev": {
         "orchestra/testbench": "^7.0",
         "nunomaduro/collision": "^6.0",
-        "hans-thomas/sphinx": "dev-master"
+        "hans-thomas/sphinx": "^9.0"
     },
     "autoload": {
         "psr-4": {
@@ -29,8 +29,8 @@
     "autoload-dev": {
         "psr-4": {
             "Hans\\Horus\\Tests\\": "tests/",
-            "App\\": "tests/skeleton/laravel-8.x/app",
-            "Database\\Factories\\": "tests/skeleton/laravel-8.x/database/factories"
+            "App\\": "tests/skeleton/laravel-9.x/app",
+            "Database\\Factories\\": "tests/skeleton/laravel-9.x/database/factories"
         }
     },
     "extra": {
@@ -42,11 +42,17 @@
             "aliases": {
                 "Horus": "Hans\\Horus\\Facades\\HorusSeeder"
             }
+        },
+        "branch-alias": {
+            "dev-master": "9.x-dev"
         }
     },
     "scripts": {
         "post-autoload-dump": [
             "@php ./vendor/bin/testbench package:discover --ansi"
-        ]
+        ],
+        "testbench": "./vendor/bin/testbench",
+        "test": "./vendor/bin/testbench package:test",
+        "unit": "./vendor/bin/phpunit"
     }
 }
