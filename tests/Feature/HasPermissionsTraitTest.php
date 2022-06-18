@@ -201,9 +201,9 @@
 		 *
 		 * @return void
 		 */
-		public function getPermissionNames() {
+		public function getPermissionsName() {
 			$this->assertEquals( $this->normalUserWithRole->permissions->pluck( 'name' ),
-				$this->normalUserWithRole->getPermissionNames() );
+				$this->normalUserWithRole->getPermissionsName() );
 		}
 
 

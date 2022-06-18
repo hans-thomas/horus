@@ -193,7 +193,7 @@
         /**
          * @return Collection
          */
-        public function getPermissionNames(): Collection {
+        public function getPermissionsName(): Collection {
             return $this->getDirectPermissions()->pluck( 'name' );
         }
 
