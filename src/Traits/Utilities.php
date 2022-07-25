@@ -4,6 +4,8 @@
     namespace Hans\Horus\Traits;
 
 
+    use Illuminate\Support\Str;
+
     trait Utilities {
         private string $prefix = '-';
         private array $keys = [ 'viewAny', 'view', 'create', 'update', 'delete', 'restore', 'forceDelete' ];
@@ -97,7 +99,7 @@
                         'area' => $area
                     ];
                 }
-            } else if ( is_string( $datum ) ) {
+            } else if ( is_string( $datum ) and ! Str::contains( $datum, '\\' ) ) {
                 $permissions[] = [
                     'name' => $model . $this->prefix . $datum,
                     'area' => $area
