@@ -48,10 +48,13 @@
 		 * @return array
 		 */
 		private function generatePermissions( string $model, $datum, $area ): array {
-			$permissions = $this->_generateBasicPermissions( $model, $area );
-			$additional  = $this->_generateAdditionalPermissions( $model, $datum, $area );
+			$permissions = collect();
+			if ( is_array( $datum ) and in_array( '*', $datum ) ) {
+				$permissions->push( $this->_generateBasicPermissions( $model, $area ) );
+			}
+			$permissions->push( $this->_generateAdditionalPermissions( $model, $datum, $area ) );
 
-			return array_merge( $permissions, $additional );
+			return $permissions->flatten(1)->toArray();
 		}
 
 		/**
