@@ -29,13 +29,13 @@
 		 * @return string
 		 */
 		public function normalizeModelName( string $model ): string {
-			$model = array_reverse( explode( '\\', strtolower( $model ) ) )[ 0 ];
+			$normalizedName = array_reverse( explode( '\\', strtolower( $model ) ) )[ 0 ];
 
 			if ( config( 'horus.prefix_permission' ) === true ) {
-				$model = array_reverse( explode( '\\', strtolower( $model ) ) )[ 1 ] . '-' . $model;
+				$normalizedName = array_reverse( explode( '\\', strtolower( $model ) ) )[ 1 ] . '-' . $normalizedName;
 			}
 
-			return $model;
+			return $normalizedName;
 		}
 
 		/**
