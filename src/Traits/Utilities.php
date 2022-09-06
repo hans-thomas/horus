@@ -28,7 +28,7 @@
 		 *
 		 * @return string
 		 */
-		private function normalizeModelName( string $model ): string {
+		public function normalizeModelName( string $model ): string {
 			$model = array_reverse( explode( '\\', strtolower( $model ) ) )[ 0 ];
 
 			if ( config( 'horus.prefix_permission' ) === true ) {
@@ -54,7 +54,7 @@
 			}
 			$permissions->push( $this->_generateAdditionalPermissions( $model, $datum, $area ) );
 
-			return $permissions->flatten(1)->toArray();
+			return $permissions->flatten( 1 )->toArray();
 		}
 
 		/**

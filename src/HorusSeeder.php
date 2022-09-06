@@ -69,9 +69,9 @@
             $permissionCollection = collect();
             foreach ( $data as $key => $datum ) {
                 if ( is_string( $key ) ) {
-                    $permission = $this->normalizeModelName( $key ) . $this->prefix . $datum;
+                    $permission = $this->normalizeModelName( $key ) . $this->splitter . $datum;
                 } else {
-                    $permission = $datum . $this->prefix . $datum;
+                    $permission = $datum . $this->splitter . $datum;
                 }
                 $permissionCollection->push( [
                     'name' => $permission,
@@ -125,9 +125,9 @@
             $permissionCollection = collect();
             foreach ( $data as $datum ) {
                 if ( $datum != '*' ) {
-                    $permission = $this->normalizeModelName( $datum ) . $this->prefix . '*';
+                    $permission = $this->normalizeModelName( $datum ) . $this->splitter . '*';
                 } else {
-                    $permission = '*' . $this->prefix . '*';
+                    $permission = '*' . $this->splitter . '*';
                 }
                 $permissionCollection->push( $permission );
             }
