@@ -7,8 +7,7 @@
 	use Illuminate\Support\Str;
 
 	trait Utilities {
-		private string $prefix = '-';
-		private array $keys = [ 'viewAny', 'view', 'create', 'update', 'delete', 'restore', 'forceDelete' ];
+		private string $splitter = '-';
 
 		/**
 		 * detect model and normalize the model name
@@ -78,9 +77,9 @@
 		 * @return array
 		 */
 		private function _generateBasicPermissions( string $model, $area ): array {
-			foreach ( $this->keys as $key ) {
+			foreach ( self::keys() as $key ) {
 				$permissions[] = [
-					'name' => $model . $this->prefix . $key,
+					'name' => $model . $this->splitter . $key,
 					'area' => $area
 				];
 			}
@@ -101,17 +100,22 @@
 			if ( is_array( $datum ) ) {
 				foreach ( $datum as $additionalPermission ) {
 					$permissions[] = [
-						'name' => $model . $this->prefix . $additionalPermission,
+						'name' => $model . $this->splitter . $additionalPermission,
 						'area' => $area
 					];
 				}
 			} else if ( is_string( $datum ) and ! Str::contains( $datum, '\\' ) ) {
 				$permissions[] = [
-					'name' => $model . $this->prefix . $datum,
+					'name' => $model . $this->splitter . $datum,
 					'area' => $area
 				];
 			}
 
 			return $permissions ?? [];
+		}
+
+		protected static function keys(): array {
+			return config( 'horus.basic_permissions' );
+
 		}
 	}
