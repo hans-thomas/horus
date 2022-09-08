@@ -36,8 +36,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Hans\\Horus\\HorusServiceProvider",
-                "Hans\\Horus\\HorusAuthServiceProvider"
+                "Hans\\Horus\\HorusServiceProvider"
             ],
             "aliases": {
                 "Horus": "Hans\\Horus\\Facades\\HorusSeeder"
