@@ -51,6 +51,8 @@
 			$permissions = collect();
 			if ( is_array( $datum ) and in_array( '*', $datum ) ) {
 				$permissions->push( $this->_generateBasicPermissions( $model, $area ) );
+			} elseif ( is_string( $datum ) and $datum == '*' ) {
+				$permissions->push( $this->_generateBasicPermissions( $model, $area ) );
 			}
 			$permissions->push( $this->_generateAdditionalPermissions( $model, $datum, $area ) );
 
