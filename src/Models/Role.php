@@ -97,9 +97,9 @@
             return self::create( compact( 'name', 'area' ) );
         }
 
-        public function getVersion(): int {
-            return $this->version;
-        }
+	    public function getVersion(): int {
+		    return $this->version ? : $this->refresh()->version;
+	    }
 
         public function increaseVersion(): bool {
             try {
