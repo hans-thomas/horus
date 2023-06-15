@@ -31,7 +31,16 @@
 			DB::beginTransaction();
 			try {
 				foreach ( $payload ?? [] as $item ) {
-					if ( Role::query()->limit( 1 )->where( 'name', $item[ 'name' ] )->exists() ) {
+					if (
+						Permission::query()->limit( 1 )
+						          ->where(
+							          [
+								          'name' => $item[ 'name' ],
+								          'area' => $area
+							          ]
+						          )
+						          ->exists()
+					) {
 						continue;
 					}
 					Role::create( $item );
