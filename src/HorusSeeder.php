@@ -73,7 +73,16 @@
 			DB::beginTransaction();
 			try {
 				foreach ( $permissionCollection as $item ) {
-					if ( Permission::query()->limit( 1 )->where( 'name', $item[ 'name' ] )->exists() ) {
+					if (
+						Permission::query()->limit( 1 )
+						          ->where(
+							          [
+								          'name' => $item[ 'name' ],
+								          'area' => $area
+							          ]
+						          )
+						          ->exists()
+					) {
 						continue;
 					}
 					Permission::create( $item );
@@ -102,7 +111,16 @@
 			DB::beginTransaction();
 			try {
 				foreach ( $permissionCollection as $item ) {
-					if ( Permission::query()->limit( 1 )->where( 'name', $item[ 'name' ] )->exists() ) {
+					if (
+						Permission::query()->limit( 1 )
+						          ->where(
+							          [
+								          'name' => $item[ 'name' ],
+								          'area' => $area
+							          ]
+						          )
+						          ->exists()
+					) {
 						continue;
 					}
 					Permission::create( $item );
