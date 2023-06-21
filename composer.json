@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^8.1"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.0",
-        "nunomaduro/collision": "^6.0",
+        "orchestra/testbench": "^8.0",
+        "nunomaduro/collision": "^7.0",
         "hans-thomas/sphinx": "^9.0"
     },
     "autoload": {
@@ -37,13 +37,7 @@
         "laravel": {
             "providers": [
                 "Hans\\Horus\\HorusServiceProvider"
-            ],
-            "aliases": {
-                "Horus": "Hans\\Horus\\Facades\\HorusSeeder"
-            }
-        },
-        "branch-alias": {
-            "dev-master": "9.x-dev"
+            ]
         }
     },
     "scripts": {
