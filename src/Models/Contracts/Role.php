@@ -43,6 +43,8 @@
 		 */
 		public static function findOrCreate( string $name, string $area ): self;
 
+		public static function findAndCache( int $id ): object;
+
 		// TODO: check this out later
 
 		/**
