@@ -20,7 +20,7 @@
 
 		protected static function booted() {
 			static::created( function( self $model ) {
-				Cache::forever( HorusCacheEnum::ROLE . $model->id, $model );
+				Cache::forever( HorusCacheEnum::ROLE . $model->id, $model->fresh() );
 			} );
 			static::updated( function( self $model ) {
 				$model->increaseVersion();
@@ -100,9 +100,9 @@
 		/**
 		 * @param int $id
 		 *
-		 * @return object
+		 * @return Role
 		 */
-		public static function findAndCache( int $id ): object {
+		public static function findAndCache( int $id ): self {
 			return Cache::rememberForever(
 				HorusCacheEnum::ROLE . $id,
 				fn() => self::query()->findOrFail( $id )
@@ -115,7 +115,7 @@
 
 		public function increaseVersion(): bool {
 			try {
-				$this->forceFill( [ 'version' => $this->getVersion() + 1 ] )->saveQuietly();
+				$this->increment( 'version' );
 				Cache::forget( HorusCacheEnum::ROLE . $this->id );
 				Cache::forever( HorusCacheEnum::ROLE . $this->id, $this );
 			} catch ( \Throwable $e ) {
