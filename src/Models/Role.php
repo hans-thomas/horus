@@ -115,7 +115,7 @@
 
 		public function increaseVersion(): bool {
 			try {
-				$this->increment( 'version' );
+				$this->fill( [ 'version' => $this->getVersion() + 1 ] )->saveQuietly();
 				Cache::forget( HorusCacheEnum::ROLE . $this->id );
 				Cache::forever( HorusCacheEnum::ROLE . $this->id, $this );
 			} catch ( \Throwable $e ) {
