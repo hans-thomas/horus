@@ -5,7 +5,7 @@
     use Hans\Horus\Exceptions\HorusErrorCode;
     use Hans\Horus\Exceptions\HorusException;
     use Hans\Horus\Models\Contracts\Permission as PermissionContract;
-    use Hans\Horus\HasRoles;
+    use Hans\Horus\Traits\HasRoles;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     use Symfony\Component\HttpFoundation\Response as ResponseAlias;

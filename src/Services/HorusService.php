@@ -1,12 +1,12 @@
 <?php
 
-	namespace Hans\Horus;
+	namespace Hans\Horus\Services;
 
 
-	use Illuminate\Support\Collection;
 	use Hans\Horus\Contracts\HorusContract;
 	use Hans\Horus\Models\Permission;
 	use Hans\Horus\Models\Role;
+	use Illuminate\Support\Collection;
 
 	class HorusService implements HorusContract {
 		public function findRole( Role|string|int $role ): Role {

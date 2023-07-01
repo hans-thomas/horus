@@ -22,7 +22,6 @@
             "Hans\\Horus\\": "src/"
         },
         "files": [
-            "src/Helpers/constants.php",
             "src/Helpers/arrays.php"
         ]
     },

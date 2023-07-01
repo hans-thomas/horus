@@ -1,7 +1,7 @@
 <?php
 
 
-	namespace Hans\Horus;
+	namespace Hans\Horus\Services;
 
 
 	use Hans\Horus\Models\Permission;
@@ -10,7 +10,7 @@
 	use Illuminate\Support\Facades\DB;
 	use Throwable;
 
-	class HorusSeeder {
+	class SeederService {
 		use Utilities;
 
 		/**

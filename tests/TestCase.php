@@ -4,7 +4,7 @@
 
 	use AreasEnum;
 	use Hans\Horus\Contracts\HorusContract;
-	use Hans\Horus\Facades\HorusSeeder as Horus;
+	use Hans\Horus\Facades\Seeder as Horus;
 	use Hans\Horus\HorusServiceProvider;
 	use Hans\Horus\Models\Role;
 	use Hans\Sphinx\SphinxServiceProvider;

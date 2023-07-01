@@ -1,10 +1,10 @@
 <?php
 
-    namespace Hans\Horus;
+    namespace Hans\Horus\Traits;
 
-    use Illuminate\Support\Collection;
     use Hans\Horus\Models\Contracts\Role;
     use Hans\Horus\Models\Permission;
+    use Illuminate\Support\Collection;
 
     trait HasPermissions {
         /**

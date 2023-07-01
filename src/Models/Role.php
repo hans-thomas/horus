@@ -4,8 +4,8 @@
 
 	use Hans\Horus\Exceptions\HorusErrorCode;
 	use Hans\Horus\Exceptions\HorusException;
-	use Hans\Horus\HasPermissions;
 	use Hans\Horus\Models\Contracts\Role as RoleContract;
+	use Hans\Horus\Traits\HasPermissions;
 	use HorusCacheEnum;
 	use Illuminate\Database\Eloquent\Model;
 	use Illuminate\Database\Eloquent\Relations\BelongsToMany;

@@ -1,11 +1,9 @@
 <?php
 
-	namespace Hans\Horus;
+	namespace Hans\Horus\Traits;
 
 
 	use Hans\Horus\Models\Role;
-	use Illuminate\Support\Collection;
-	use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 	trait HasRoles {
 		use HasPermissions;
