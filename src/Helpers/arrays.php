@@ -1,13 +1,22 @@
 <?php
 
-    if ( ! function_exists( 'roles' ) ) {
-        function roles():array {
-            return RolesEnum::toArray();
-        }
-    }
+	use Hans\Horus\Helpers\Enums\AreaEnum;
+	use Hans\Horus\Helpers\Enums\RoleEnum;
 
-    if ( ! function_exists( 'areas' ) ) {
-        function areas():array {
-            return AreasEnum::toArray();
-        }
-    }
+	if ( ! function_exists( 'roles' ) ) {
+		/**
+		 * @return array
+		 */
+		function roles(): array {
+			return RoleEnum::cases();
+		}
+	}
+
+	if ( ! function_exists( 'areas' ) ) {
+		/**
+		 * @return array
+		 */
+		function areas(): array {
+			return AreaEnum::cases();
+		}
+	}
