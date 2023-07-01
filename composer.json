@@ -15,7 +15,7 @@
     "require-dev": {
         "orchestra/testbench": "^8.0",
         "nunomaduro/collision": "^7.0",
-        "hans-thomas/sphinx": "^1.0"
+        "spatie/laravel-permission": "^5.8"
     },
     "autoload": {
         "psr-4": {
@@ -27,9 +27,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Hans\\Horus\\Tests\\": "tests/",
-            "App\\": "tests/skeleton/laravel-9.x/app",
-            "Database\\Factories\\": "tests/skeleton/laravel-9.x/database/factories"
+            "Hans\\Horus\\Tests\\": "tests/"
         }
     },
     "extra": {
