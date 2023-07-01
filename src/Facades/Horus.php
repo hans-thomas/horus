@@ -8,7 +8,7 @@
 	use RuntimeException;
 
 	/**
-	 *
+	 * @method static bool createRoles( array $roles )
 	 */
 	class Horus extends Facade {
 

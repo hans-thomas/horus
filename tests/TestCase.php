@@ -2,67 +2,24 @@
 
 	namespace Hans\Horus\Tests;
 
-	use AreasEnum;
-	use Hans\Horus\Contracts\HorusContract;
-	use Hans\Horus\Facades\Seeder as Horus;
+
 	use Hans\Horus\HorusServiceProvider;
-	use Hans\Horus\Models\Role;
-	use Hans\Sphinx\SphinxServiceProvider;
 	use Illuminate\Foundation\Application;
 	use Illuminate\Foundation\Testing\RefreshDatabase;
 	use Illuminate\Routing\Router;
 	use Orchestra\Testbench\TestCase as BaseTestCase;
-	use RolesEnum;
+	use Spatie\Permission\PermissionServiceProvider;
 
 	class TestCase extends BaseTestCase {
 		use RefreshDatabase;
 
-		public HorusContract $horus;
-
 		/**
 		 * Setup the test environment.
+		 *
+		 * @return void
 		 */
 		protected function setUp(): void {
-			// Code before application created.
-
 			parent::setUp();
-
-			// Code after application created.
-			$this->horus = app( HorusContract::class );
-			$this->seedHorus();
-		}
-
-		private function seedHorus(): void {
-			Horus::createPermissions( [
-				"User" => 'admin'
-			], AreasEnum::ADMIN );
-			Horus::createPermissions( [
-				"User" => 'user'
-			], AreasEnum::USER );
-
-			Horus::createRoles( [ RolesEnum::DEFAULT_ADMINS ], AreasEnum::ADMIN );
-
-			Horus::createRoles( [ RolesEnum::DEFAULT_USERS ], AreasEnum::USER );
-
-			Horus::assignPermissionsToRole( Role::findByName( RolesEnum::DEFAULT_ADMINS, AreasEnum::ADMIN ), [
-				"User" => [
-					'view',
-					'update'
-				]
-			], AreasEnum::ADMIN );
-
-			Horus::assignPermissionsToRole( Role::findByName( RolesEnum::DEFAULT_USERS, AreasEnum::USER ), [
-				"User" => [ 'view' ],
-			], AreasEnum::USER );
-
-
-			Horus::createSuperPermissions( [
-				"User" => '*',
-			], AreasEnum::ADMIN );
-
-			Horus::assignSuperPermissionsToRole( Role::findByName( RolesEnum::DEFAULT_ADMINS, AreasEnum::ADMIN ), [
-				"User"
-			] );
 		}
 
 		/**
@@ -72,7 +29,7 @@
 		 *
 		 * @return string|null
 		 */
-		protected function getApplicationTimezone( $app ) {
+		protected function getApplicationTimezone( $app ): ?string {
 			return 'UTC';
 		}
 
@@ -83,10 +40,10 @@
 		 *
 		 * @return array
 		 */
-		protected function getPackageProviders( $app ) {
+		protected function getPackageProviders( $app ): array {
 			return [
 				HorusServiceProvider::class,
-				SphinxServiceProvider::class
+				PermissionServiceProvider::class
 			];
 		}
 
@@ -97,7 +54,7 @@
 		 *
 		 * @return array
 		 */
-		protected function getPackageAliases( $app ) {
+		protected function getPackageAliases( $app ): array {
 			return [//	'Acme' => 'Acme\Facade',
 			];
 		}
@@ -109,7 +66,7 @@
 		 *
 		 * @return void
 		 */
-		protected function defineEnvironment( $app ) {
+		protected function defineEnvironment( $app ): void {
 			// Setup default database to use sqlite :memory:
 			$app[ 'config' ]->set( 'database.default', 'testbench' );
 			$app[ 'config' ]->set( 'database.connections.testbench', [
@@ -126,7 +83,7 @@
 		 *
 		 * @return void
 		 */
-		protected function defineRoutes( $router ) {
+		protected function defineRoutes( $router ): void {
 			// Define routes.
 		}
 
@@ -135,16 +92,9 @@
 		 *
 		 * @return void
 		 */
-		protected function defineDatabaseMigrations() {
+		protected function defineDatabaseMigrations(): void {
 			$this->loadLaravelMigrations();
+			$this->loadMigrationsFrom( __DIR__ . '/Core/migrations' );
 		}
 
-		/**
-		 * Get base path.
-		 *
-		 * @return string
-		 */
-		protected function getBasePath() {
-			return __DIR__ . '/skeleton/laravel-9.x';
-		}
 	}

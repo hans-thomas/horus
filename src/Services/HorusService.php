@@ -1,71 +1,46 @@
 <?php
 
+
 	namespace Hans\Horus\Services;
 
 
-	use Hans\Horus\Contracts\HorusContract;
-	use Hans\Horus\Models\Permission;
-	use Hans\Horus\Models\Role;
-	use Illuminate\Support\Collection;
+	use Hans\Horus\Exceptions\HorusErrorCode;
+	use Hans\Horus\Exceptions\HorusException;
+	use Spatie\Permission\Models\Role;
+	use Throwable;
 
-	class HorusService implements HorusContract {
-		public function findRole( Role|string|int $role ): Role {
-			return $this->resolveRole( $role );
+	class HorusService {
+
+		public function createRoles( array $roles ): bool {
+			$data = array_map(
+				function( $item ) {
+					if ( is_string( $item ) ) {
+						$item = [ 'name' => $item, 'guard_name' => config( 'auth.defaults.guard' ) ];
+					} elseif ( is_array( $item ) ) {
+						if ( ! isset( $item[ 'guard_name' ] ) ) {
+							$item[ 'guard_name' ] = config( 'auth.defaults.guard' );
+						}
+					}
+
+					return $item;
+				},
+				$roles
+			);
+
+			try {
+				batch()->insert(
+					new Role,
+					[ 'name', 'guard_name' ],
+					$data
+				);
+			} catch ( Throwable $e ) {
+				throw new HorusException(
+					'Failed to create requested roles! ' . $e->getMessage(),
+					HorusErrorCode::FAILED_TO_CREATE_ROLES
+				);
+			}
+
+			return true;
 		}
 
-		public function findAllRoles(): Collection {
-			return Role::all();
-		}
-
-		public function findAnyRoles( Role|string|int ...$roles ): Collection {
-			$collection = collect();
-			foreach ( $roles as $role ) :
-				try {
-					$resolved = $this->findRole( $role );
-				} catch ( \Throwable $e ) {
-					continue;
-				}
-				$collection->push( $resolved );
-			endforeach;
-
-			return $collection;
-		}
-
-		public function findPermission( Permission|int|string $permission ): Permission {
-			return $this->resolvePermission( $permission );
-		}
-
-		public function findAllPermissions(): Collection {
-			return Permission::all();
-		}
-
-		public function findAnyPermissions( Permission|string|int ...$permissions ): Collection {
-			$collection = collect();
-			foreach ( $permissions as $permission ) :
-				try {
-					$resolved = $this->findPermission( $permission );
-				} catch ( \Throwable $e ) {
-					continue;
-				}
-				$collection->push( $resolved );
-			endforeach;
-
-			return $collection;
-		}
-
-		private function resolveRole( Role|string|int $role ): Role {
-			return match ( true ) {
-				$role instanceof Role => Role::findById( $role->id ),
-				is_string( $role ) => Role::findByName( $role ),
-				is_int( $role ) => Role::findById( $role )
-			};
-		}
-
-		private function resolvePermission( Permission|string|int $permission ): Permission {
-			return match ( true ) {
-				$permission instanceof Permission => Permission::findById( $permission->id ),
-				is_string( $permission ) => Permission::findByName( $permission ),
-				is_int( $permission ) => Permission::findById( $permission )
-			};
-		}
 	}

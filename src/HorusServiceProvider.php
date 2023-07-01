@@ -3,7 +3,6 @@
 	namespace Hans\Horus;
 
 	use Hans\Horus\Services\HorusService;
-	use Hans\Horus\Services\SeederService;
 	use Illuminate\Support\ServiceProvider;
 
 	class HorusServiceProvider extends ServiceProvider {
@@ -14,7 +13,6 @@
 		 * @return void
 		 */
 		public function register(): void {
-			$this->app->singleton( 'seeder-service', SeederService::class );
 			$this->app->singleton( 'horus-service', HorusService::class );
 		}
 

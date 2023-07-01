@@ -1,9 +1,13 @@
 <?php
 
 	return [
-		'defaults'          => [
-			'area' => \AreasEnum::USER
+		'basic_permissions' => [
+			'viewAny',
+			'view',
+			'create',
+			'update',
+			'delete',
+			'restore',
+			'forceDelete'
 		],
-		'prefix_permission' => true,
-		'basic_permissions' => [ 'viewAny', 'view', 'create', 'update', 'delete', 'restore', 'forceDelete' ],
 	];
