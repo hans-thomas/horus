@@ -4,13 +4,14 @@
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Support\Facades\Schema;
 
-    class CreateRolablesTable extends Migration {
+	return new class extends Migration {
+
         /**
          * Run the migrations.
          *
          * @return void
          */
-        public function up() {
+        public function up(): void {
             Schema::create( 'rolables', function( Blueprint $table ) {
                 $table->foreignId( 'role_id' )->constrained();
                 $table->unsignedBigInteger( 'rolable_id' );
@@ -23,7 +24,8 @@
          *
          * @return void
          */
-        public function down() {
+        public function down(): void {
             Schema::dropIfExists( 'rolables' );
         }
-    }
+
+    };
