@@ -9,6 +9,7 @@
 
 	/**
 	 * @method static bool createRoles( array $roles )
+	 * @method static bool createPermissions( array $permissions, string $guard = null )
 	 */
 	class Horus extends Facade {
 
