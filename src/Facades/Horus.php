@@ -6,11 +6,13 @@
 
 	use Illuminate\Support\Facades\Facade;
 	use RuntimeException;
+	use Spatie\Permission\Models\Role;
 
 	/**
 	 * @method static bool createRoles( array $roles, string $guard = null )
 	 * @method static bool createPermissions( array $permissions, string $guard = null )
 	 * @method static bool createSuperPermissions( array $permissions, string $guard = null )
+	 * @method static bool assignPermissionsToRole( string|Role $role, array $permissions )
 	 */
 	class Horus extends Facade {
 

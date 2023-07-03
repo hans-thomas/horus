@@ -488,4 +488,55 @@
 			);
 		}
 
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
+		public function assignPermissionsToRole(): void {
+			$roles = [ 'admin', 'reporter' ];
+			self::assertTrue(
+				Horus::createRoles( $roles )
+			);
+
+			$permissions = [
+				Post::class,
+				Category::class => [ 'viewPosts' ]
+			];
+			self::assertTrue(
+				Horus::createPermissions( $permissions )
+			);
+
+			self::assertTrue(
+				Horus::assignPermissionsToRole(
+					'admin',
+					[
+						Post::class => [ 'viewAny', 'update' ]
+					]
+				)
+			);
+
+			self::assertCount(
+				2,
+				Role::findByName( 'admin' )->getPermissionNames()->toArray()
+			);
+			self::assertContains(
+				'tests.instances.models.post.viewAny',
+				Role::findByName( 'admin' )->getPermissionNames()->toArray()
+			);
+			self::assertContains(
+				'tests.instances.models.post.update',
+				Role::findByName( 'admin' )->getPermissionNames()->toArray()
+			);
+
+			self::assertNotContains(
+				'tests.instances.models.post.delete',
+				Role::findByName( 'admin' )->getPermissionNames()->toArray()
+			);
+			self::assertNotContains(
+				'tests.instances.models.category.viewPosts',
+				Role::findByName( 'admin' )->getPermissionNames()->toArray()
+			);
+		}
+
 	}

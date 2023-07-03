@@ -133,6 +133,40 @@
 			return true;
 		}
 
+		public function assignPermissionsToRole( string|Role $role, array $permissions ): bool {
+			$role = is_string( $role ) ?
+				Role::findByName( $role ) :
+				$role;
+
+			$data = array_map(
+				function( $item, $index ) {
+					$this->validateModel( $index );
+					$item        = is_array( $item ) ? $item : [ $item ];
+					$permissions = $this->makeCustomPermissions( $item, $index );
+					foreach ( $permissions as $permission ) {
+						$data[] = $permission[ 'name' ];
+					}
+
+					return $data ?? [];
+				},
+				array_values( $permissions ),
+				array_keys( $permissions ),
+			);
+
+			$merged = $this->flatten( $data );
+
+			try {
+				$role->syncPermissions( $merged );
+			} catch ( Throwable $e ) {
+				throw new HorusException(
+					'Failed to assign permissions to the role! ' . $e->getMessage(),
+					HorusErrorCode::FAILED_TO_ASSIGN_PERMISSIONS_TO_ROLE
+				);
+			}
+
+			return true;
+		}
+
 		private function validateModel( string $class ): void {
 			if (
 				! class_exists( $class ) and
