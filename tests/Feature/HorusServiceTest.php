@@ -26,7 +26,6 @@
 			$this->default_guard = config( 'auth.defaults.guard' );
 		}
 
-
 		/**
 		 * @test
 		 *
@@ -57,6 +56,31 @@
 		 *
 		 * @return void
 		 */
+		public function createRolesWithDifferentGuard(): void {
+			$roles = [ 'user' ];
+
+			self::assertTrue(
+				Horus::createRoles( $roles, 'customer' )
+			);
+
+			self::assertInstanceOf(
+				Role::class,
+				Role::findByName( 'user', 'customer' )
+			);
+			self::assertEquals(
+				[
+					'name'       => 'user',
+					'guard_name' => 'customer'
+				],
+				Role::findByName( 'user', 'customer' )->only( 'name', 'guard_name' )
+			);
+		}
+
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
 		public function createPermissions(): void {
 			$permissions = [
 				Post::class, // supposed to create all basic permissions
@@ -73,36 +97,36 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-post-viewAny",
+						"name"       => "tests.instances.models.post.viewAny",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-post-view",
+						"name"       => "tests.instances.models.post.view",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-post-create",
+						"name"       => "tests.instances.models.post.create",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-post-update",
+						"name"       => "tests.instances.models.post.update",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-post-delete",
+						"name"       => "tests.instances.models.post.delete",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-post-restore",
+						"name"       => "tests.instances.models.post.restore",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-post-forceDelete",
+						"name"       => "tests.instances.models.post.forceDelete",
 						"guard_name" => "web"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-post%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.post%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -113,12 +137,12 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-category-viewPosts",
+						"name"       => "tests.instances.models.category.viewPosts",
 						"guard_name" => "web"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-category%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.category%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -129,40 +153,40 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-comment-viewAny",
+						"name"       => "tests.instances.models.comment.viewAny",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-comment-view",
+						"name"       => "tests.instances.models.comment.view",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-comment-create",
+						"name"       => "tests.instances.models.comment.create",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-comment-update",
+						"name"       => "tests.instances.models.comment.update",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-comment-delete",
+						"name"       => "tests.instances.models.comment.delete",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-comment-restore",
+						"name"       => "tests.instances.models.comment.restore",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-comment-forceDelete",
+						"name"       => "tests.instances.models.comment.forceDelete",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-comment-viewPost",
+						"name"       => "tests.instances.models.comment.viewPost",
 						"guard_name" => "web"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-comment%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.comment%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -173,12 +197,12 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-article-viewComments",
+						"name"       => "tests.instances.models.article.viewComments",
 						"guard_name" => "web"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-article%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.article%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -189,36 +213,36 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-tag-viewAny",
+						"name"       => "tests.instances.models.tag.viewAny",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-tag-view",
+						"name"       => "tests.instances.models.tag.view",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-tag-create",
+						"name"       => "tests.instances.models.tag.create",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-tag-update",
+						"name"       => "tests.instances.models.tag.update",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-tag-delete",
+						"name"       => "tests.instances.models.tag.delete",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-tag-restore",
+						"name"       => "tests.instances.models.tag.restore",
 						"guard_name" => "web"
 					],
 					[
-						"name"       => "tests-instances-models-tag-forceDelete",
+						"name"       => "tests.instances.models.tag.forceDelete",
 						"guard_name" => "web"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-tag%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.tag%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -231,7 +255,7 @@
 		 * @test
 		 *
 		 * @return void
-		*/
+		 */
 		public function createPermissionsWithDifferentGuard(): void {
 			$permissions = [
 				Post::class,
@@ -242,42 +266,42 @@
 			];
 
 			self::assertTrue(
-				Horus::createPermissions( $permissions,'sphinx' )
+				Horus::createPermissions( $permissions, 'sphinx' )
 			);
 
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-post-viewAny",
+						"name"       => "tests.instances.models.post.viewAny",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-post-view",
+						"name"       => "tests.instances.models.post.view",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-post-create",
+						"name"       => "tests.instances.models.post.create",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-post-update",
+						"name"       => "tests.instances.models.post.update",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-post-delete",
+						"name"       => "tests.instances.models.post.delete",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-post-restore",
+						"name"       => "tests.instances.models.post.restore",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-post-forceDelete",
+						"name"       => "tests.instances.models.post.forceDelete",
 						"guard_name" => "sphinx"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-post%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.post%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -288,12 +312,12 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-category-viewPosts",
+						"name"       => "tests.instances.models.category.viewPosts",
 						"guard_name" => "sphinx"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-category%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.category%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -304,40 +328,40 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-comment-viewAny",
+						"name"       => "tests.instances.models.comment.viewAny",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-comment-view",
+						"name"       => "tests.instances.models.comment.view",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-comment-create",
+						"name"       => "tests.instances.models.comment.create",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-comment-update",
+						"name"       => "tests.instances.models.comment.update",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-comment-delete",
+						"name"       => "tests.instances.models.comment.delete",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-comment-restore",
+						"name"       => "tests.instances.models.comment.restore",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-comment-forceDelete",
+						"name"       => "tests.instances.models.comment.forceDelete",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-comment-viewPost",
+						"name"       => "tests.instances.models.comment.viewPost",
 						"guard_name" => "sphinx"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-comment%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.comment%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -348,12 +372,12 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-article-viewComments",
+						"name"       => "tests.instances.models.article.viewComments",
 						"guard_name" => "sphinx"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-article%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.article%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -364,36 +388,98 @@
 			self::assertEquals(
 				[
 					[
-						"name"       => "tests-instances-models-tag-viewAny",
+						"name"       => "tests.instances.models.tag.viewAny",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-tag-view",
+						"name"       => "tests.instances.models.tag.view",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-tag-create",
+						"name"       => "tests.instances.models.tag.create",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-tag-update",
+						"name"       => "tests.instances.models.tag.update",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-tag-delete",
+						"name"       => "tests.instances.models.tag.delete",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-tag-restore",
+						"name"       => "tests.instances.models.tag.restore",
 						"guard_name" => "sphinx"
 					],
 					[
-						"name"       => "tests-instances-models-tag-forceDelete",
+						"name"       => "tests.instances.models.tag.forceDelete",
 						"guard_name" => "sphinx"
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', 'tests-instances-models-tag%' )
+				          ->where( 'name', 'LIKE', 'tests.instances.models.tag%' )
+				          ->get()
+				          ->map(
+					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
+				          )
+				          ->toArray()
+			);
+		}
+
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
+		public function createSuperPermissions(): void {
+			$permissions = [
+				Post::class,
+			];
+
+			self::assertTrue(
+				Horus::createSuperPermissions( $permissions )
+			);
+
+			self::assertEquals(
+				[
+					[
+						"name"       => "tests.instances.models.post.*",
+						"guard_name" => "web"
+					]
+				],
+				Permission::query()
+				          ->where( 'name', 'LIKE', 'tests.instances.models.post%' )
+				          ->get()
+				          ->map(
+					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
+				          )
+				          ->toArray()
+			);
+		}
+
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
+		public function createSuperPermissionsWithDifferentGuard(): void {
+			$permissions = [
+				Post::class,
+			];
+
+			self::assertTrue(
+				Horus::createSuperPermissions( $permissions, 'sphinx' )
+			);
+
+			self::assertEquals(
+				[
+					[
+						"name"       => "tests.instances.models.post.*",
+						"guard_name" => "sphinx"
+					]
+				],
+				Permission::query()
+				          ->where( 'name', 'LIKE', 'tests.instances.models.post%' )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]

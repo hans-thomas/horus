@@ -13,31 +13,35 @@
 
 	class HorusService {
 
-		public function createRoles( array $roles ): bool {
+		public function createRoles( array $roles, string $guard = null ): bool {
+			$guard ??= config( 'auth.defaults.guard' );
+
 			$data = array_map(
-				function( $item ) {
+				function( $item ) use ( $guard ) {
+					$result = [];
 					if ( is_string( $item ) ) {
-						$item = [ 'name' => $item, 'guard_name' => config( 'auth.defaults.guard' ) ];
-					} elseif ( is_array( $item ) ) {
-						if ( ! isset( $item[ 'guard_name' ] ) ) {
-							$item[ 'guard_name' ] = config( 'auth.defaults.guard' );
-						}
+						$result = [ 'name' => $item, 'guard_name' => $guard ];
 					}
 
-					return $item;
+					return $result;
 				},
 				$roles
+			);
+
+			$filtered = array_filter(
+				$data,
+				fn( $item ) => ! empty( $item )
 			);
 
 			try {
 				batch()->insert(
 					new Role,
 					[ 'name', 'guard_name' ],
-					$data
+					$filtered
 				);
 			} catch ( Throwable $e ) {
 				throw new HorusException(
-					'Failed to create requested roles! ' . $e->getMessage(),
+					'Failed to create requested role(s)! ' . $e->getMessage(),
 					HorusErrorCode::FAILED_TO_CREATE_ROLES
 				);
 			}
@@ -81,27 +85,47 @@
 				array_keys( $permissions )
 			);
 
-			$merged = [];
-			foreach ( $data as $datum ) {
-				$merged = array_merge( $merged, $datum );
-			}
-
-			$unique = [];
-			foreach ( $merged as $value ) {
-				$unique[ $value[ 'name' ] ] = $value;
-			}
-
-			$data = array_values( $unique );
+			$merged = $this->flatten( $data );
+			$unique = $this->unique( $merged );
 
 			try {
 				batch()->insert(
 					new Permission,
 					[ 'name', 'guard_name' ],
-					$data
+					$unique
 				);
 			} catch ( Throwable $e ) {
 				throw new HorusException(
-					'Failed to create requested permissions! ' . $e->getMessage(),
+					'Failed to create requested permission(s)! ' . $e->getMessage(),
+					HorusErrorCode::FAILED_TO_CREATE_PERMISSIONS
+				);
+			}
+
+			return true;
+		}
+
+		public function createSuperPermissions( array $permissions, string $guard = null ): bool {
+			$data = array_map(
+				function( $item ) use ( $guard ) {
+					$this->validateModel( $item );
+
+					return $this->makeCustomPermissions( [ '*' ], $item, $guard );
+				},
+				$permissions
+			);
+
+			$merged = $this->flatten( $data );
+			$unique = $this->unique( $merged );
+
+			try {
+				batch()->insert(
+					new Permission,
+					[ 'name', 'guard_name' ],
+					$unique
+				);
+			} catch ( Throwable $e ) {
+				throw new HorusException(
+					'Failed to create requested permission(s)! ' . $e->getMessage(),
 					HorusErrorCode::FAILED_TO_CREATE_PERMISSIONS
 				);
 			}
@@ -121,23 +145,23 @@
 			}
 		}
 
-		private function makePrefixUsingModel( string $model ): string {
+		private function makePrefixUsingModel( string $model, string $separator = '.' ): string {
 			$exploded = explode( '\\', $model );
 			$prefix   = ( $explodedCount = count( $exploded ) ) > 3 ?
 				array_slice( $exploded, 2, $explodedCount - 1 ) :
 				[ last( $exploded ) ];
 
-			return strtolower( implode( '-', $prefix ) );
+			return strtolower( implode( $separator, $prefix ) );
 		}
 
-		private function makeBasicPermissions( string $model, string $guard = null ): array {
+		private function makeBasicPermissions( string $model, string $guard = null, string $separator = '.' ): array {
 			$result = [];
 			$guard  ??= config( 'auth.defaults.guard' );
-			$prefix = $this->makePrefixUsingModel( $model );
+			$prefix = $this->makePrefixUsingModel( $model, $separator );
 
 			foreach ( horus_config( 'basic_permissions' ) as $permission ) {
 				$result[] = [
-					'name'       => "$prefix-$permission",
+					'name'       => "{$prefix}{$separator}{$permission}",
 					'guard_name' => $guard
 				];
 			}
@@ -145,19 +169,37 @@
 			return $result;
 		}
 
-		private function makeCustomPermissions( array $permissions, string $model, string $guard = null ): array {
+		private function makeCustomPermissions( array $permissions, string $model, string $guard = null, string $separator = '.' ): array {
 			$result = [];
 			$guard  ??= config( 'auth.defaults.guard' );
-			$prefix = $this->makePrefixUsingModel( $model );
+			$prefix = $this->makePrefixUsingModel( $model, $separator );
 
 			foreach ( $permissions as $permission ) {
 				$result[] = [
-					'name'       => "$prefix-$permission",
+					'name'       => "{$prefix}{$separator}{$permission}",
 					'guard_name' => $guard
 				];
 			}
 
 			return $result;
+		}
+
+		private function flatten( array $data ): array {
+			$merged = [];
+			foreach ( $data as $datum ) {
+				$merged = array_merge( $merged, $datum );
+			}
+
+			return $merged;
+		}
+
+		private function unique( array $data ): array {
+			$unique = [];
+			foreach ( $data as $value ) {
+				$unique[ $value[ 'name' ] ] = $value;
+			}
+
+			return array_values( $unique );
 		}
 
 	}
