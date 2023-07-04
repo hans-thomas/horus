@@ -1,5 +1,10 @@
 # Horus
 
+[![codecov](https://codecov.io/gh/hans-thomas/horus/branch/master/graph/badge.svg?token=X1D6I0JLSZ)](https://codecov.io/gh/hans-thomas/horus)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/hans-thomas/horus/php.yml)
+![GitHub top language](https://img.shields.io/github/languages/top/hans-thomas/horus)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/hans-thomas/horus)
+
 it's a roles and permissions management system for laravel.
 
 features:
