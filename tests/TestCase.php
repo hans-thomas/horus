@@ -13,6 +13,9 @@
 	class TestCase extends BaseTestCase {
 		use RefreshDatabase;
 
+		protected string $separator;
+		protected string $default_guard;
+
 		/**
 		 * Setup the test environment.
 		 *
@@ -20,6 +23,9 @@
 		 */
 		protected function setUp(): void {
 			parent::setUp();
+
+			$this->separator     = horus_config( 'separator' );
+			$this->default_guard = config( 'auth.defaults.guard' );
 		}
 
 		/**
