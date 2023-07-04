@@ -27,5 +27,5 @@
 		| Permissions separated using this character.
 		|
 		*/
-		'separator'         => '.',
+		'separator'         => '-',
 	];

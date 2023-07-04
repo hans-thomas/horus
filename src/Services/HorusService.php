@@ -14,12 +14,27 @@
 	use Throwable;
 
 	class HorusService {
+
+		/**
+		 * Permissions separator
+		 *
+		 * @var string
+		 */
 		private string $separator;
 
 		public function __construct() {
 			$this->separator = horus_config( 'separator' );
 		}
 
+		/**
+		 * Create roles in given or default guard
+		 *
+		 * @param array       $roles
+		 * @param string|null $guard
+		 *
+		 * @return bool
+		 * @throws HorusException
+		 */
 		public function createRoles( array $roles, string $guard = null ): bool {
 			$guard = $this->resolveGuard( $guard );
 
@@ -56,6 +71,15 @@
 			return true;
 		}
 
+		/**
+		 * Create permissions in given or default guard
+		 *
+		 * @param array       $permissions
+		 * @param string|null $guard
+		 *
+		 * @return bool
+		 * @throws HorusException
+		 */
 		public function createPermissions( array $permissions, string $guard = null ): bool {
 			$data = array_map(
 				function( $item, $index ) use ( $guard ) {
@@ -111,6 +135,15 @@
 			return true;
 		}
 
+		/**
+		 * Create super permissions in given or default guard
+		 *
+		 * @param array       $permissions
+		 * @param string|null $guard
+		 *
+		 * @return bool
+		 * @throws HorusException
+		 */
 		public function createSuperPermissions( array $permissions, string $guard = null ): bool {
 			$data = array_map(
 				function( $item ) use ( $guard ) {
@@ -140,6 +173,15 @@
 			return true;
 		}
 
+		/**
+		 * Assign given permissions to a specific role
+		 *
+		 * @param string|Role $role
+		 * @param array       $permissions
+		 *
+		 * @return bool
+		 * @throws HorusException
+		 */
 		public function assignPermissionsToRole( string|Role $role, array $permissions ): bool {
 			$role = $this->resolveRole( $role );
 
@@ -172,6 +214,15 @@
 			return true;
 		}
 
+		/**
+		 * Assign super permissions to a specific role
+		 *
+		 * @param string|Role $role
+		 * @param array       $permissions
+		 *
+		 * @return bool
+		 * @throws HorusException
+		 */
 		public function assignSuperPermissionsToRole( string|Role $role, array $permissions ): bool {
 			$role = $this->resolveRole( $role );
 
@@ -202,6 +253,17 @@
 			return true;
 		}
 
+		/**
+		 * Create permissions using policy class's methods
+		 *
+		 * @param string      $policyClass
+		 * @param string      $model
+		 * @param string|null $guard
+		 * @param array       $methodsToIgnore
+		 *
+		 * @return bool
+		 * @throws HorusException
+		 */
 		public function createPermissionsUsingPolicy(
 			string $policyClass,
 			string $model,
@@ -234,6 +296,14 @@
 			return $this->createPermissions( $data, $guard );
 		}
 
+		/**
+		 * Validate the given model class
+		 *
+		 * @param string $class
+		 *
+		 * @return void
+		 * @throws HorusException
+		 */
 		private function validateModel( string $class ): void {
 			if (
 				! class_exists( $class ) and
@@ -246,6 +316,13 @@
 			}
 		}
 
+		/**
+		 * Make a prefix for given model
+		 *
+		 * @param string $model
+		 *
+		 * @return string
+		 */
 		private function makePrefixUsingModel( string $model ): string {
 			$exploded = explode( '\\', $model );
 			$prefix   = ( $explodedCount = count( $exploded ) ) > 3 ?
@@ -255,12 +332,20 @@
 			return strtolower( implode( $this->separator, $prefix ) );
 		}
 
+		/**
+		 * Make basic permissions defined in config file for given model in given or default guard
+		 *
+		 * @param string      $model
+		 * @param string|null $guard
+		 *
+		 * @return array
+		 */
 		private function makeBasicPermissions( string $model, string $guard = null ): array {
 			$result = [];
 			$guard  = $this->resolveGuard( $guard );
 			$prefix = $this->makePrefixUsingModel( $model );
 
-			foreach ( horus_config( 'basic_permissions' ) as $permission ) {
+			foreach ( horus_config( 'basic_permissions', [] ) as $permission ) {
 				$result[] = [
 					'name'       => "{$prefix}{$this->separator}{$permission}",
 					'guard_name' => $guard
@@ -270,6 +355,15 @@
 			return $result;
 		}
 
+		/**
+		 * Make custom permissions for given model in given or default guard
+		 *
+		 * @param array       $permissions
+		 * @param string      $model
+		 * @param string|null $guard
+		 *
+		 * @return array
+		 */
 		private function makeCustomPermissions( array $permissions, string $model, string $guard = null ): array {
 			$result = [];
 			$guard  = $this->resolveGuard( $guard );
@@ -285,6 +379,13 @@
 			return $result;
 		}
 
+		/**
+		 * Flatten the data with depth of 1
+		 *
+		 * @param array $data
+		 *
+		 * @return array
+		 */
 		private function flatten( array $data ): array {
 			$merged = [];
 			foreach ( $data as $datum ) {
@@ -294,6 +395,13 @@
 			return $merged;
 		}
 
+		/**
+		 * Check data has unique names
+		 *
+		 * @param array $data
+		 *
+		 * @return array
+		 */
 		private function unique( array $data ): array {
 			$unique = [];
 			foreach ( $data as $value ) {
@@ -303,12 +411,26 @@
 			return array_values( $unique );
 		}
 
+		/**
+		 * If role was string, resolve it to related model instance
+		 *
+		 * @param string|Role $role
+		 *
+		 * @return Role
+		 */
 		private function resolveRole( string|Role $role ): Role {
 			return is_string( $role ) ?
 				Role::findByName( $role ) :
 				$role;
 		}
 
+		/**
+		 * If guard is null, return the default guard
+		 *
+		 * @param string|null $guard
+		 *
+		 * @return string
+		 */
 		private function resolveGuard( ?string $guard ): string {
 			return $guard ?? config( 'auth.defaults.guard' );
 		}
