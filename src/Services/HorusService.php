@@ -14,6 +14,11 @@
 	use Throwable;
 
 	class HorusService {
+		private string $separator;
+
+		public function __construct() {
+			$this->separator = horus_config( 'separator' );
+		}
 
 		public function createRoles( array $roles, string $guard = null ): bool {
 			$guard = $this->resolveGuard( $guard );
@@ -241,23 +246,23 @@
 			}
 		}
 
-		private function makePrefixUsingModel( string $model, string $separator = '.' ): string {
+		private function makePrefixUsingModel( string $model ): string {
 			$exploded = explode( '\\', $model );
 			$prefix   = ( $explodedCount = count( $exploded ) ) > 3 ?
 				array_slice( $exploded, 2, $explodedCount - 1 ) :
 				[ last( $exploded ) ];
 
-			return strtolower( implode( $separator, $prefix ) );
+			return strtolower( implode( $this->separator, $prefix ) );
 		}
 
-		private function makeBasicPermissions( string $model, string $guard = null, string $separator = '.' ): array {
+		private function makeBasicPermissions( string $model, string $guard = null ): array {
 			$result = [];
 			$guard  = $this->resolveGuard( $guard );
-			$prefix = $this->makePrefixUsingModel( $model, $separator );
+			$prefix = $this->makePrefixUsingModel( $model );
 
 			foreach ( horus_config( 'basic_permissions' ) as $permission ) {
 				$result[] = [
-					'name'       => "{$prefix}{$separator}{$permission}",
+					'name'       => "{$prefix}{$this->separator}{$permission}",
 					'guard_name' => $guard
 				];
 			}
@@ -265,14 +270,14 @@
 			return $result;
 		}
 
-		private function makeCustomPermissions( array $permissions, string $model, string $guard = null, string $separator = '.' ): array {
+		private function makeCustomPermissions( array $permissions, string $model, string $guard = null ): array {
 			$result = [];
 			$guard  = $this->resolveGuard( $guard );
-			$prefix = $this->makePrefixUsingModel( $model, $separator );
+			$prefix = $this->makePrefixUsingModel( $model );
 
 			foreach ( $permissions as $permission ) {
 				$result[] = [
-					'name'       => "{$prefix}{$separator}{$permission}",
+					'name'       => "{$prefix}{$this->separator}{$permission}",
 					'guard_name' => $guard
 				];
 			}
