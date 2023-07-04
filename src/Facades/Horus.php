@@ -4,6 +4,7 @@
 	namespace Hans\Horus\Facades;
 
 
+	use Hans\Horus\Services\HorusService;
 	use Illuminate\Support\Facades\Facade;
 	use RuntimeException;
 	use Spatie\Permission\Models\Role;
@@ -14,6 +15,9 @@
 	 * @method static bool createSuperPermissions( array $permissions, string $guard = null )
 	 * @method static bool assignPermissionsToRole( string|Role $role, array $permissions )
 	 * @method static bool assignSuperPermissionsToRole( string|Role $role, array $permissions )
+	 * @method static bool createPermissionsUsingPolicy( string $policyClass, string $model, string $guard = null, array $methodsToIgnore = [] )
+	 *
+	 * @see HorusService
 	 */
 	class Horus extends Facade {
 

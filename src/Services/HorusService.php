@@ -6,7 +6,9 @@
 
 	use Hans\Horus\Exceptions\HorusErrorCode;
 	use Hans\Horus\Exceptions\HorusException;
+	use Illuminate\Auth\Access\HandlesAuthorization;
 	use Illuminate\Database\Eloquent\Model;
+	use ReflectionClass;
 	use Spatie\Permission\Models\Permission;
 	use Spatie\Permission\Models\Role;
 	use Throwable;
@@ -14,7 +16,7 @@
 	class HorusService {
 
 		public function createRoles( array $roles, string $guard = null ): bool {
-			$guard ??= config( 'auth.defaults.guard' );
+			$guard = $this->resolveGuard( $guard );
 
 			$data = array_map(
 				function( $item ) use ( $guard ) {
@@ -195,6 +197,38 @@
 			return true;
 		}
 
+		public function createPermissionsUsingPolicy(
+			string $policyClass,
+			string $model,
+			string $guard = null,
+			array $methodsToIgnore = []
+		): bool {
+			$guard = $this->resolveGuard( $guard );
+
+			if ( ! class_exists( $policyClass ) ) {
+				throw new HorusException(
+					'Policy class is not exists!',
+					HorusErrorCode::POLICY_CLASS_IS_NOT_EXISTS
+				);
+			}
+
+			$policy = collect( ( new ReflectionClass( $policyClass ) )->getMethods() )->pluck( 'name' );
+
+			// collect HandlesAuthorization trait method to ignore if used on policy class
+			$handlesTrait = collect(
+				( new ReflectionClass( HandlesAuthorization::class ) )->getMethods()
+			)
+				->pluck( 'name' );
+
+			$extracted = $policy->filter( fn( $item ) => ! in_array( $item, $handlesTrait->toArray() ) )
+			                    ->filter( fn( $item ) => ! in_array( $item, $methodsToIgnore ) )
+			                    ->toArray();
+
+			$data[ $model ] = $extracted;
+
+			return $this->createPermissions( $data, $guard );
+		}
+
 		private function validateModel( string $class ): void {
 			if (
 				! class_exists( $class ) and
@@ -218,7 +252,7 @@
 
 		private function makeBasicPermissions( string $model, string $guard = null, string $separator = '.' ): array {
 			$result = [];
-			$guard  ??= config( 'auth.defaults.guard' );
+			$guard  = $this->resolveGuard( $guard );
 			$prefix = $this->makePrefixUsingModel( $model, $separator );
 
 			foreach ( horus_config( 'basic_permissions' ) as $permission ) {
@@ -233,7 +267,7 @@
 
 		private function makeCustomPermissions( array $permissions, string $model, string $guard = null, string $separator = '.' ): array {
 			$result = [];
-			$guard  ??= config( 'auth.defaults.guard' );
+			$guard  = $this->resolveGuard( $guard );
 			$prefix = $this->makePrefixUsingModel( $model, $separator );
 
 			foreach ( $permissions as $permission ) {
@@ -268,6 +302,10 @@
 			return is_string( $role ) ?
 				Role::findByName( $role ) :
 				$role;
+		}
+
+		private function resolveGuard( ?string $guard ): string {
+			return $guard ?? config( 'auth.defaults.guard' );
 		}
 
 	}

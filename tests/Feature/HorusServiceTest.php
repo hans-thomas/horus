@@ -8,6 +8,7 @@
 	use Hans\Horus\Tests\Instances\Models\Comment;
 	use Hans\Horus\Tests\Instances\Models\Post;
 	use Hans\Horus\Tests\Instances\Models\Tag;
+	use Hans\Horus\Tests\Instances\Policies\PostPolicy;
 	use Hans\Horus\Tests\TestCase;
 	use Spatie\Permission\Models\Permission;
 	use Spatie\Permission\Models\Role;
@@ -572,6 +573,143 @@
 				'tests.instances.models.category.*',
 				Role::findByName( 'admin' )->getPermissionNames()->toArray()
 			);
+		}
+
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
+		public function createPermissionsUsingPolicy(): void {
+			$policy = PostPolicy::class;
+			$model  = Post::class;
+
+			self::assertTrue(
+				Horus::createPermissionsUsingPolicy(
+					$policy,
+					$model,
+				)
+			);
+
+			self::assertEquals(
+				[
+					[
+						"name"       => "tests.instances.models.post.viewAny",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.view",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.create",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.update",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.delete",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.restore",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.forceDelete",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.viewComments",
+						"guard_name" => $this->default_guard
+					],
+					[
+						"name"       => "tests.instances.models.post.updateComments",
+						"guard_name" => $this->default_guard
+					]
+				],
+				Permission::query()
+				          ->where( 'name', 'LIKE', 'tests.instances.models.post%' )
+				          ->get()
+				          ->map(
+					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
+				          )
+				          ->toArray()
+			);
+
+		}
+
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
+		public function createPermissionsUsingPolicyWithDifferentGuardAndIgnoredMethods(): void {
+			$policy = PostPolicy::class;
+			$model  = Post::class;
+
+			self::assertTrue(
+				Horus::createPermissionsUsingPolicy(
+					$policy,
+					$model,
+					'sphinx',
+					[ 'viewComments' ]
+				)
+			);
+
+			self::assertEquals(
+				[
+					[
+						"name"       => "tests.instances.models.post.viewAny",
+						"guard_name" => "sphinx"
+					],
+					[
+						"name"       => "tests.instances.models.post.view",
+						"guard_name" => "sphinx"
+					],
+					[
+						"name"       => "tests.instances.models.post.create",
+						"guard_name" => "sphinx"
+					],
+					[
+						"name"       => "tests.instances.models.post.update",
+						"guard_name" => "sphinx"
+					],
+					[
+						"name"       => "tests.instances.models.post.delete",
+						"guard_name" => "sphinx"
+					],
+					[
+						"name"       => "tests.instances.models.post.restore",
+						"guard_name" => "sphinx"
+					],
+					[
+						"name"       => "tests.instances.models.post.forceDelete",
+						"guard_name" => "sphinx"
+					],
+					[
+						"name"       => "tests.instances.models.post.updateComments",
+						"guard_name" => "sphinx"
+					]
+				],
+				Permission::query()
+				          ->where( 'name', 'LIKE', 'tests.instances.models.post%' )
+				          ->get()
+				          ->map(
+					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
+				          )
+				          ->toArray()
+			);
+
+			$this->assertDatabaseMissing(
+				( new Permission )->getTable(),
+				[
+					'name' => 'tests.instances.models.post.viewComments'
+				]
+			);
+
 		}
 
 	}
