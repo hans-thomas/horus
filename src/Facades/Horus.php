@@ -13,6 +13,7 @@
 	 * @method static bool createPermissions( array $permissions, string $guard = null )
 	 * @method static bool createSuperPermissions( array $permissions, string $guard = null )
 	 * @method static bool assignPermissionsToRole( string|Role $role, array $permissions )
+	 * @method static bool assignSuperPermissionsToRole( string|Role $role, array $permissions )
 	 */
 	class Horus extends Facade {
 

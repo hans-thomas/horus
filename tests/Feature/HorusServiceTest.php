@@ -539,4 +539,39 @@
 			);
 		}
 
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
+		public function assignSuperPermissionsToRole(): void {
+			$roles = [ 'admin', 'reporter' ];
+			self::assertTrue(
+				Horus::createRoles( $roles )
+			);
+
+			$permissions = [
+				Post::class,
+				Category::class // tests.instances.models.category.*
+			];
+
+			self::assertTrue(
+				Horus::createSuperPermissions( $permissions )
+			);
+
+			self::assertTrue(
+				Horus::assignSuperPermissionsToRole(
+					Role::findByName( 'admin' ),
+					[
+						Category::class
+					]
+				)
+			);
+
+			self::assertContains(
+				'tests.instances.models.category.*',
+				Role::findByName( 'admin' )->getPermissionNames()->toArray()
+			);
+		}
+
 	}

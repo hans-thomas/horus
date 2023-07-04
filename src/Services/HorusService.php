@@ -134,9 +134,7 @@
 		}
 
 		public function assignPermissionsToRole( string|Role $role, array $permissions ): bool {
-			$role = is_string( $role ) ?
-				Role::findByName( $role ) :
-				$role;
+			$role = $this->resolveRole( $role );
 
 			$data = array_map(
 				function( $item, $index ) {
@@ -151,6 +149,36 @@
 				},
 				array_values( $permissions ),
 				array_keys( $permissions ),
+			);
+
+			$merged = $this->flatten( $data );
+
+			try {
+				$role->syncPermissions( $merged );
+			} catch ( Throwable $e ) {
+				throw new HorusException(
+					'Failed to assign permissions to the role! ' . $e->getMessage(),
+					HorusErrorCode::FAILED_TO_ASSIGN_PERMISSIONS_TO_ROLE
+				);
+			}
+
+			return true;
+		}
+
+		public function assignSuperPermissionsToRole( string|Role $role, array $permissions ): bool {
+			$role = $this->resolveRole( $role );
+
+			$data = array_map(
+				function( $item ) {
+					$this->validateModel( $item );
+					$permissions = $this->makeCustomPermissions( [ '*' ], $item );
+					foreach ( $permissions as $permission ) {
+						$data[] = $permission[ 'name' ];
+					}
+
+					return $data ?? [];
+				},
+				array_values( $permissions ),
 			);
 
 			$merged = $this->flatten( $data );
@@ -234,6 +262,12 @@
 			}
 
 			return array_values( $unique );
+		}
+
+		private function resolveRole( string|Role $role ): Role {
+			return is_string( $role ) ?
+				Role::findByName( $role ) :
+				$role;
 		}
 
 	}
