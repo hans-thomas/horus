@@ -15,8 +15,24 @@ Features:
 - Create permissions for a model based on related policy class
 - Assign permissions to roles in a breeze
 
+## Installation
+
+First install the package via composer
+
+```shell
+composer require hans-thomas/horus:^1.0
+```
+
+Then, publish the configuration file
+
+```shell
+php artisan vendor:publish --tag horus-config
+```
+
+Done.
+
 Support
 -------
 
-- [Documentation]()
+- [Documentation](https://docs-horus.vercel.app)
 - [Report bugs](https://github.com/hans-thomas/horus/issues)
