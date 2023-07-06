@@ -1,9 +1,5 @@
 title = 'Horus'
 baseURL = 'https://docura.github.io/'
-
 defaultContentLanguage = 'en'
 languageCode = 'en-us'
-
-enableGitInfo = true
-
 markup.highlight.noClasses = false
