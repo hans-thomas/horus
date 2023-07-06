@@ -1,5 +1,11 @@
-title = 'Horus'
-baseURL = 'https://docura.github.io/'
-defaultContentLanguage = 'en'
-languageCode = 'en-us'
+title = "Horus"
+baseURL = ""
+
+defaultContentLanguage = "en"
+languageCode = "en-us"
+
+googleAnalytics = ""
+
+enableGitInfo = true
+
 markup.highlight.noClasses = false
