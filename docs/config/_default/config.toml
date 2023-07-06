@@ -1,11 +1,12 @@
 title = "Horus"
 baseURL = ""
 
-defaultContentLanguage = "en"
-languageCode = "en-us"
+defaultContentLanguage = 'en'
+languageCode = 'en-us'
 
-googleAnalytics = ""
+googleAnalytics = ''
 
 enableGitInfo = true
 
-#markup.highlight.noClasses = false
+markup.highlight.noClasses = false
+theme = 'docura'

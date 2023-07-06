@@ -20,8 +20,13 @@ indexName = ''
 apiKey = ''
 
 #[[githubRepos]]
-#name = 'Valravn'
-#repo = 'hans-thomas/valravn'
+#name = 'Website'
+#repo = 'docura/site'
 #icon = "<i class='icon icon-book'></i>"
-#description = 'Feature reach scaffold for developing api services in laravel'
-
+#description = 'The repository of the website.'
+#
+#[[githubRepos]]
+#name = 'Code'
+#repo = 'docura/docura'
+#icon = "<i class='icon icon-theme'></i>"
+#description = 'The repository of the theme.'
