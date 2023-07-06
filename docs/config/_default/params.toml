@@ -1,0 +1,27 @@
+description = 'A roles and permissions registerer that make working on authorization easy'
+
+author = 'Mortazavi'
+authorURL = 'https://github.com/hans-thomas'
+
+facebookURL = ''
+twitterURL = ''
+githubURL = 'https://github.com/hans-thomas/horus'
+youtubeURL = ''
+
+githubRepo = ''
+githubSponsorURL = ''
+buyMeACoffeeURL = ''
+
+[algolia]
+[algolia.en]
+container = '#site-header-search'
+appId = ''
+indexName = ''
+apiKey = ''
+
+#[[githubRepos]]
+#name = 'Valravn'
+#repo = 'hans-thomas/valravn'
+#icon = "<i class='icon icon-book'></i>"
+#description = 'Feature reach scaffold for developing api services in laravel'
+
