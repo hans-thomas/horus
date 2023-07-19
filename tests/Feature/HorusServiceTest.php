@@ -2,6 +2,7 @@
 
 	namespace Hans\Horus\Tests\Feature;
 
+	use Hans\Horus\Exceptions\HorusException;
 	use Hans\Horus\Facades\Horus;
 	use Hans\Horus\Tests\Instances\Models\Article;
 	use Hans\Horus\Tests\Instances\Models\Category;
@@ -115,7 +116,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -131,7 +133,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}category%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}category%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -175,7 +178,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}comment%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}comment%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -191,7 +195,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}article%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}article%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -231,13 +236,32 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}tag%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}tag%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
 				          )
 				          ->toArray()
 			);
+		}
+
+
+		/**
+		 * @test
+		 *
+		 * @return void
+		 */
+		public function createPermissionsWithInvalidModel(): void {
+			$permissions = [
+				'\Hans\Horus\Tests\Instances\NotExistModels\Post',
+			];
+
+			$this->expectException( HorusException::class );
+			$this->expectExceptionMessage( 'Class is not a valid model! [ \Hans\Horus\Tests\Instances\NotExistModels\Post ].' );
+
+			Horus::createPermissions( $permissions );
+
 		}
 
 		/**
@@ -290,7 +314,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -306,7 +331,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}category%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}category%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -350,7 +376,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}comment%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}comment%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -366,7 +393,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}article%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}article%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -406,7 +434,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}tag%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}tag%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -437,7 +466,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -468,7 +498,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -619,7 +650,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
@@ -683,7 +715,8 @@
 					]
 				],
 				Permission::query()
-				          ->where( 'name', 'LIKE', "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
+				          ->where( 'name', 'LIKE',
+					          "tests{$this->separator}instances{$this->separator}models{$this->separator}post%" )
 				          ->get()
 				          ->map(
 					          fn( $value ) => [ 'name' => $value->name, 'guard_name' => $value->guard_name ]
