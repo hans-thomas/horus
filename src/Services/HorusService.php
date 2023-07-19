@@ -203,7 +203,7 @@
 			$merged = $this->flatten( $data );
 
 			try {
-				$role->syncPermissions( $merged );
+				$role->givePermissionTo( $merged );
 			} catch ( Throwable $e ) {
 				throw new HorusException(
 					'Failed to assign permissions to the role! ' . $e->getMessage(),
@@ -242,7 +242,7 @@
 			$merged = $this->flatten( $data );
 
 			try {
-				$role->syncPermissions( $merged );
+				$role->givePermissionTo( $merged );
 			} catch ( Throwable $e ) {
 				throw new HorusException(
 					'Failed to assign permissions to the role! ' . $e->getMessage(),
