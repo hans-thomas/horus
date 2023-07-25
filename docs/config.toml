@@ -31,7 +31,7 @@ summaryLength = 30
   homepage_button_link = '/docs'
   homepage_button_text = 'Read The Docs'
   homepage_intro = 'Horus is a roles and permissions registerer that makes it easy to work on authorization.'
-  homepage_image = ''
+  homepage_image = 'images/installation.gif'
 
   ## You can enable to add anchor links to header elements
   # enable_anchor_link = true
@@ -48,8 +48,8 @@ summaryLength = 30
 #    meta_twitter_creator = "@zerostaticio"
 
   [params.logo]
-      mobile = "/images/logo-mobile.svg"
-      standard  = "/images/logo.svg"
+      mobile = "/images/logo.png"
+      standard  = "/images/logo.png"
 
   [params.footer]
     copyright_text = '© 2023 Mortazavi'
