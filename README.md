@@ -1,11 +1,12 @@
 # Horus
 
-<p align="center"><img alt="Valravn Logo" src="assets/horus-banner.png"></p>
+<p align="center"><img alt="horus banner" src="assets/horus-banner.png"></p>
 
 [![codecov](https://codecov.io/gh/hans-thomas/horus/branch/master/graph/badge.svg?token=X1D6I0JLSZ)](https://codecov.io/gh/hans-thomas/horus)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/hans-thomas/horus/php.yml)
 ![GitHub top language](https://img.shields.io/github/languages/top/hans-thomas/horus)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/hans-thomas/horus)
+![StyleCi](https://github.styleci.io/repos/464497597/shield?style=plastic)
 
 Horus is a roles and permissions registerer that make working on authorization easy.
 
