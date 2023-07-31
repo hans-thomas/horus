@@ -1,7 +1,9 @@
 <?php
 
-	namespace Hans\Horus\Tests\Instances\Models;
+namespace Hans\Horus\Tests\Instances\Models;
 
-	use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Model;
 
-	class Article extends Model { }
+    class Article extends Model
+    {
+    }
