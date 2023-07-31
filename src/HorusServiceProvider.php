@@ -2,38 +2,38 @@
 
 namespace Hans\Horus;
 
-    use Hans\Horus\Services\HorusService;
-    use Illuminate\Support\ServiceProvider;
+use Hans\Horus\Services\HorusService;
+use Illuminate\Support\ServiceProvider;
 
-    class HorusServiceProvider extends ServiceProvider
+class HorusServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register(): void
     {
-        /**
-         * Register any application services.
-         *
-         * @return void
-         */
-        public function register(): void
-        {
-            $this->app->singleton('horus-service', HorusService::class);
-        }
+        $this->app->singleton('horus-service', HorusService::class);
+    }
 
-        /**
-         * Bootstrap any application services.
-         *
-         * @return void
-         */
-        public function boot(): void
-        {
-            $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'horus');
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'horus');
 
-            if ($this->app->runningInConsole()) {
-                $this->publishes(
-                    [
-                        __DIR__.'/../config/config.php' => config_path('horus.php'),
-                    ],
-                    'horus-config'
-                );
-                $this->loadMigrationsFrom(__DIR__.'/../migrations');
-            }
+        if ($this->app->runningInConsole()) {
+            $this->publishes(
+                [
+                    __DIR__.'/../config/config.php' => config_path('horus.php'),
+                ],
+                'horus-config'
+            );
+            $this->loadMigrationsFrom(__DIR__.'/../migrations');
         }
     }
+}
