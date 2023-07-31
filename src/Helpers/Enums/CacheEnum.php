@@ -2,7 +2,7 @@
 
 namespace Hans\Horus\Helpers\Enums;
 
-    enum CacheEnum: string
-    {
-        case ROLE = 'role_cache_';
-    }
+enum CacheEnum: string
+{
+    case ROLE = 'role_cache_';
+}
