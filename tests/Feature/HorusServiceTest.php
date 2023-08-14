@@ -556,14 +556,14 @@ class HorusServiceTest extends TestCase
      */
     public function assignPermissionsToRole(): void
     {
-        $roles = ['admin', 'reporter'];
+        $roles = ['admin', 'reporter','reviewer','writers'];
         self::assertTrue(
             Horus::createRoles($roles)
         );
 
         $permissions = [
-            Post::class,
-            Category::class => ['viewPosts'],
+	        Tag::class,
+	        Post::class => ['*','viewTags'],
         ];
         self::assertTrue(
             Horus::createPermissions($permissions)
@@ -573,32 +573,65 @@ class HorusServiceTest extends TestCase
             Horus::assignPermissionsToRole(
                 'admin',
                 [
-                    Post::class => ['viewAny', 'update'],
+	                Tag::class,
+                    Post::class => ['viewAny', 'update','viewTags'],
                 ]
             )
         );
 
         self::assertCount(
-            2,
-            Role::findByName('admin')->getPermissionNames()->toArray()
-        );
-        self::assertContains(
-            "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}viewAny",
-            Role::findByName('admin')->getPermissionNames()->toArray()
-        );
-        self::assertContains(
-            "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}update",
-            Role::findByName('admin')->getPermissionNames()->toArray()
+            10,
+            $adminPermissionsNames=Role::findByName('admin')->getPermissionNames()->toArray()
         );
 
-        self::assertNotContains(
-            "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}delete",
-            Role::findByName('admin')->getPermissionNames()->toArray()
+		// tags permissions
+        self::assertContains(
+            "tests{$this->separator}instances{$this->separator}models{$this->separator}tag{$this->separator}viewAny",
+            $adminPermissionsNames
         );
-        self::assertNotContains(
-            "tests{$this->separator}instances{$this->separator}models{$this->separator}category{$this->separator}viewPosts",
-            Role::findByName('admin')->getPermissionNames()->toArray()
+        self::assertContains(
+            "tests{$this->separator}instances{$this->separator}models{$this->separator}tag{$this->separator}update",
+            $adminPermissionsNames
         );
+        self::assertContains(
+            "tests{$this->separator}instances{$this->separator}models{$this->separator}tag{$this->separator}delete",
+            $adminPermissionsNames
+        );
+        self::assertContains(
+            "tests{$this->separator}instances{$this->separator}models{$this->separator}tag{$this->separator}restore",
+            $adminPermissionsNames
+        );
+        self::assertContains(
+            "tests{$this->separator}instances{$this->separator}models{$this->separator}tag{$this->separator}forceDelete",
+            $adminPermissionsNames
+        );
+
+		// posts permissions
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}viewAny",
+		    $adminPermissionsNames
+	    );
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}update",
+		    $adminPermissionsNames
+	    );
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}viewTags",
+		    $adminPermissionsNames
+	    );
+
+	    self::assertNotContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}delete",
+		    $adminPermissionsNames
+	    );
+	    self::assertNotContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}restore",
+		    $adminPermissionsNames
+	    );
+	    self::assertNotContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}forceDelete",
+		    $adminPermissionsNames
+	    );
     }
 
     /**
