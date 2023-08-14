@@ -564,6 +564,7 @@ class HorusServiceTest extends TestCase
         $permissions = [
 	        Tag::class,
 	        Post::class => ['*','viewTags'],
+	        Comment::class  => ['*', 'viewPost'],
         ];
         self::assertTrue(
             Horus::createPermissions($permissions)
@@ -574,13 +575,14 @@ class HorusServiceTest extends TestCase
                 'admin',
                 [
 	                Tag::class,
-                    Post::class => ['viewAny', 'update','viewTags'],
+	                Post::class => ['viewAny', 'update','viewTags'],
+	                Comment::class => ['*', 'viewPost'],
                 ]
             )
         );
 
         self::assertCount(
-            10,
+            18,
             $adminPermissionsNames=Role::findByName('admin')->getPermissionNames()->toArray()
         );
 
@@ -630,6 +632,32 @@ class HorusServiceTest extends TestCase
 	    );
 	    self::assertNotContains(
 		    "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}forceDelete",
+		    $adminPermissionsNames
+	    );
+
+	    // tags permissions
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}comment{$this->separator}viewAny",
+		    $adminPermissionsNames
+	    );
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}comment{$this->separator}update",
+		    $adminPermissionsNames
+	    );
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}comment{$this->separator}delete",
+		    $adminPermissionsNames
+	    );
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}comment{$this->separator}restore",
+		    $adminPermissionsNames
+	    );
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}comment{$this->separator}forceDelete",
+		    $adminPermissionsNames
+	    );
+	    self::assertContains(
+		    "tests{$this->separator}instances{$this->separator}models{$this->separator}comment{$this->separator}viewPost",
 		    $adminPermissionsNames
 	    );
     }
