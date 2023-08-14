@@ -194,9 +194,23 @@ class HorusService
 
         $data = array_map(
             function ($item, $index) {
-                $this->validateModel($index);
-                $item = is_array($item) ? $item : [$item];
-                $permissions = $this->makeCustomPermissions($item, $index);
+                $model = $index;
+                $permissions = [];
+                if (is_int($index)) {
+                    $model = $item;
+                    $permissions = $this->makeBasicPermissions($model);
+                } else {
+                    $item = is_array($item) ? $item : [$item];
+                    if (in_array('*', $item)) {
+                        $permissions = $this->makeBasicPermissions($model);
+                        $item = array_filter(
+                            $item,
+                            fn ($value) => $value !== '*'
+                        );
+                    }
+                    $permissions = array_merge($permissions, $this->makeCustomPermissions($item, $model));
+                }
+                $this->validateModel($model);
                 foreach ($permissions as $permission) {
                     $data[] = $permission['name'];
                 }
