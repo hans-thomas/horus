@@ -303,11 +303,11 @@ class HorusService
             );
         }
 
-        $policy = collect(( new ReflectionClass($policyClass) )->getMethods())->pluck('name');
+        $policy = collect((new ReflectionClass($policyClass))->getMethods())->pluck('name');
 
         // collect HandlesAuthorization trait method to ignore if used on policy class
         $handlesTrait = collect(
-            ( new ReflectionClass(HandlesAuthorization::class) )->getMethods()
+            (new ReflectionClass(HandlesAuthorization::class))->getMethods()
         )
             ->pluck('name');
 

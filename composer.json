@@ -1,6 +1,14 @@
 {
     "name": "hans-thomas/horus",
     "description": "a roles and permissions manager",
+    "keywords": [
+        "acl",
+        "roles",
+        "permission",
+        "laravel-packages",
+        "roles-management",
+        "permission-management"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
