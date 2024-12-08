@@ -836,7 +836,7 @@ class HorusServiceTest extends TestCase
         );
 
         $this->assertDatabaseMissing(
-            ( new Permission() )->getTable(),
+            (new Permission())->getTable(),
             [
                 'name' => "tests{$this->separator}instances{$this->separator}models{$this->separator}post{$this->separator}viewComments",
             ]
