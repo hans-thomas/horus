@@ -18,12 +18,18 @@ Features:
 - Create permissions for a model based on related policy class
 - Assign permissions to roles in a breeze
 
+| Version | Laravel |
+|:-------:|:-------:|
+|   1.x   |  10.x   |
+|   2.x   |  11.x   |
+
+
 ## Installation
 
 First install the package via composer
 
 ```shell
-composer require hans-thomas/horus:^1.0
+composer require hans-thomas/horus
 ```
 
 Then, publish the configuration file
