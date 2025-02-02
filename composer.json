@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "spatie/laravel-permission": "^5.8",
+        "spatie/laravel-permission": "^6.0",
         "mavinoo/laravel-batch": "^2.3"
     },
     "require-dev": {
