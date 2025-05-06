@@ -35,7 +35,7 @@ class HorusService
      *
      * @return bool
      */
-    public function createRoles(array $roles, string $guard = null): bool
+    public function createRoles(array $roles, ?string $guard = null): bool
     {
         $guard = $this->resolveGuard($guard);
 
@@ -82,7 +82,7 @@ class HorusService
      *
      * @return bool
      */
-    public function createPermissions(array $permissions, string $guard = null): bool
+    public function createPermissions(array $permissions, ?string $guard = null): bool
     {
         $data = array_map(
             function ($item, $index) use ($guard) {
@@ -148,7 +148,7 @@ class HorusService
      *
      * @return bool
      */
-    public function createSuperPermissions(array $permissions, string $guard = null): bool
+    public function createSuperPermissions(array $permissions, ?string $guard = null): bool
     {
         $data = array_map(
             function ($item) use ($guard) {
@@ -291,7 +291,7 @@ class HorusService
     public function createPermissionsUsingPolicy(
         string $policyClass,
         string $model,
-        string $guard = null,
+        ?string $guard = null,
         array $methodsToIgnore = []
     ): bool {
         $guard = $this->resolveGuard($guard);
@@ -367,7 +367,7 @@ class HorusService
      *
      * @return array
      */
-    private function makeBasicPermissions(string $model, string $guard = null): array
+    private function makeBasicPermissions(string $model, ?string $guard = null): array
     {
         $result = [];
         $guard = $this->resolveGuard($guard);
@@ -392,7 +392,7 @@ class HorusService
      *
      * @return array
      */
-    private function makeCustomPermissions(array $permissions, string $model, string $guard = null): array
+    private function makeCustomPermissions(array $permissions, string $model, ?string $guard = null): array
     {
         $result = [];
         $guard = $this->resolveGuard($guard);
