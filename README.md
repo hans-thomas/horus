@@ -21,7 +21,7 @@ Features:
 | Version | Laravel |
 |:-------:|:-------:|
 |   1.x   |  10.x   |
-|   2.x   |  11.x   |
+|   2.x   |  11.x, 12.x   |
 
 
 ## Installation

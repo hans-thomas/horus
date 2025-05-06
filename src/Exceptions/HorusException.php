@@ -9,7 +9,7 @@ class HorusException extends Exception
 {
     private int|string $errorCode;
 
-    public function __construct(string $message, int|string $errorCode, int $responseCode = 500, Throwable $previous = null)
+    public function __construct(string $message, int|string $errorCode, int $responseCode = 500, ?Throwable $previous = null)
     {
         parent::__construct($message, $responseCode, $previous);
         $this->errorCode = $errorCode;
